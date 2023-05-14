@@ -1,0 +1,75 @@
+/// <reference types="multer" />
+import { Workbook } from "exceljs";
+import { CourseService } from "src/course/course.service";
+import { DataIngestionService } from "../data-ingestion/data-ingestion.service";
+import { FiscalYearService } from "src/fiscal-year/fiscal-year.service";
+import { ConfigService } from "@nestjs/config";
+import { HttpService } from "@nestjs/axios";
+import { Calendar } from "src/interfaces/calendar.interface";
+import { SchedulingIssue } from "src/interfaces/scheduling_failures.interface";
+import { Availabilities } from "src/interfaces/availabilities.interface";
+import { fyDto, HolidayDto, ScheduleDto, trainerFilterDto } from "./dto";
+import { SchedulerHelper } from "./scheduler.helper";
+import { FilterDto } from "./dto/filter.dto";
+import { PrismaService } from "src/prisma/prisma.service";
+import { ManualDto } from "./dto/manual.dto";
+import { TrainerService } from "src/trainer/trainer.service";
+import { CalendarService } from "src/calendar/calendar.service";
+import { AddItemsOnHoldDto } from "./dto/add-items-on-hold.dto";
+export declare class SchedulerService {
+    private prisma;
+    private readonly dataIngestionService;
+    private readonly courseService;
+    private configService;
+    private httpService;
+    private fiscalYearService;
+    private helper;
+    private trainerService;
+    private calendarService;
+    constructor(prisma: PrismaService, dataIngestionService: DataIngestionService, courseService: CourseService, configService: ConfigService, httpService: HttpService, fiscalYearService: FiscalYearService, helper: SchedulerHelper, trainerService: TrainerService, calendarService: CalendarService);
+    calendar: Calendar;
+    yearOne: number;
+    yearTwo: number;
+    availabilities: Availabilities;
+    failures: SchedulingIssue[];
+    warnings: SchedulingIssue[];
+    scheduleNew(file: Express.Multer.File, formData: ScheduleDto): Promise<any>;
+    private generateMultiModuleSchedule;
+    manualAdd(file: Express.Multer.File, formData: ManualDto): Promise<{
+        failures: SchedulingIssue[];
+        warnings: SchedulingIssue[];
+    }>;
+    private fixManualAdditionCourses;
+    private generateSchedule;
+    confirmItemsOnHold(dto: AddItemsOnHoldDto): Promise<{
+        errors: any[];
+    }>;
+    private getMonthlyAvailableSlots;
+    createErrorWorkbook(file: Express.Multer.File, courseInfoValidationObjects: Map<number, string>, manualValidationObjects: Map<number, string>): Promise<Workbook>;
+    getPublicHolidays(dto: HolidayDto): Promise<{
+        [k: string]: string;
+    }>;
+    getTrainerFilterOptions(dto: trainerFilterDto): Promise<any>;
+    getPMFilterOptions(dto: fyDto): Promise<any>;
+    getFilterResults(dto: FilterDto): Promise<any[]>;
+    getBlackoutDates(body: fyDto): Promise<any[]>;
+    formatCalendarResults(courseRuns: Array<any>): any[];
+    private formatBlackoutDates;
+    private initCalendar;
+    private setBlackoutDates;
+    private adjustCourseSlotsForDate;
+    private setLowManpowerDates;
+    private setCourseSlotsForDate;
+    private findBestMonthToStart;
+    private getPrefWeeks;
+    private findBestWeekOfMonth;
+    private findBestNonConsecutiveWeeks;
+    private findBestConsecutiveWeeks;
+    private findBestDayToStart;
+    private seekForwardConsecutiveWeeks;
+    private seekForward;
+    private areTrainersAvailable;
+    private updateTrainerAvailabilities;
+    private populateAvailabilities;
+    private getBestMonthBasedOnLastRunInPrevFy;
+}
