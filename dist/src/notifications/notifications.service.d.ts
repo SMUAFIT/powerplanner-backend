@@ -1,0 +1,37 @@
+import { MailerService } from "@nestjs-modules/mailer/dist";
+import { TrainerService } from "src/trainer/trainer.service";
+import { UserService } from "src/user/user.service";
+import { Email } from "src/interfaces/email.interfaces";
+import { CourseSegment } from "@prisma/client";
+import { ConfigService } from "@nestjs/config";
+import { PrismaService } from "src/prisma/prisma.service";
+import { GetCourseSegmentDto } from "src/course/dto/get-course-segment.dto";
+import { EditCourseSegmentDto } from "src/course/dto";
+export declare class NotificationsService {
+    private prisma;
+    private readonly mailerService;
+    private readonly trainerService;
+    private readonly userService;
+    private configService;
+    constructor(prisma: PrismaService, mailerService: MailerService, trainerService: TrainerService, userService: UserService, configService: ConfigService);
+    private FRONTEND_URL;
+    private VERSION_REGEX;
+    sendEmail(email: Email): void;
+    sendAdhocEmail(courseSegmentArr: GetCourseSegmentDto[]): Promise<any>;
+    sendWelcomeEmail(user_email: string, user_name: string, rawPassword: string): void;
+    sendResetPasswordEmail(user_email: string, user_name: string, rawPassword: string): void;
+    notifyTrainersBySegments(segments: CourseSegment[]): Promise<void>;
+    notifyNewlyAssignedTrainers(trainers: string[], dto: EditCourseSegmentDto): Promise<void>;
+    notifyUnassignedTrainers(trainers: string[], dto: EditCourseSegmentDto): Promise<void>;
+    private craftNewlyAssignedEmail;
+    private craftUnassignedEmail;
+    private craftTrainerCourseEmail;
+    private craftWelcomeEmail;
+    private craftResetPasswordTemplate;
+    private groupSegmentsByTrainer;
+    private renderUnassignedTemplate;
+    private renderPendingTemplate;
+    private renderConfirmedOrCancelledTemplate;
+    private renderWelcomeTemplate;
+    private renderResetPasswordTemplate;
+}
